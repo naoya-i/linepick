@@ -32,8 +32,6 @@ int main(int argc, char** argv) {
   std::ifstream ifsInput(opts.of('i').c_str(), std::ios::binary|std::ios::ate);
   size_t filesize = ifsInput.tellg();
   ifsInput.close();
-
-  opts.defset('j', "1");
   
   int                 numParallel = atoi(opts.of('d').c_str());
   size_t              stride      = filesize/numParallel + 1,
@@ -50,10 +48,6 @@ int main(int argc, char** argv) {
   // If the offset is non-zero, skip the current line.
   if(0 != offset)
     getline(ifsTarget, ln);
-
-  // Ok, let us get the specified program started.
-  std::ostringstream  ossTaskID, ossOffset; 
-  std::string         command(opts.of('c'));
 
   // Push each line into the sub process.
   while(ifsTarget.tellg() <= offset+stride && getline(ifsTarget, ln))
